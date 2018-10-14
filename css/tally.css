@@ -14,8 +14,7 @@ div#tallyMan
 }
 
 img.masthead,
-table#tallyHo,
-table#tallyLogTable
+table#tallyHo
 {
     margin-left: auto;
     margin-right:auto;
@@ -48,17 +47,6 @@ table#tallyHo thead td
     text-align: center;
     font-weight: bold;
     border-bottom: 2px solid #009;
-}
-
-table#tallyHo thead td.selected a,
-table#tallyHo thead td.selected a:visited
-{
-    padding: 0.25em;
-    display:block;
-    width: 100%;
-    height: 100%;
-    background-color:blue;
-    color: white;
 }
 
 table#tallyHo thead td.selected.down a
@@ -98,6 +86,12 @@ table#tallyHo tbody td.tallyVersion
     padding-right: 0;
 }
 
+table#tallyHo tfoot td.tallyName
+{
+    text-align: left;
+    padding-right: 0;
+}
+
 table#tallyHo tbody td.tallyVersion
 {
     padding-left: 1em;
@@ -117,33 +111,6 @@ table#tallyHo tbody td.validSSL
 {
     color: #090;
     font-weight: bold;
-}
-
-table#tallyLogTable
-{
-    margin-top: 1em;
-    text-align: left;
-    font-style: italic;
-}
-
-table#tallyLogTable td.in-progress-0
-{
-    color: #c30;
-}
-
-table#tallyLogTable td.in-progress-1
-{
-    color: #c60;
-}
-
-table#tallyLogTable td.in-progress-2
-{
-    color: #cc0;
-}
-
-table#tallyLogTable td.in-progress-3
-{
-    color: #0c0;
 }
 
 table#tallyHo tbody td.validServer
@@ -211,4 +178,28 @@ div#tallyVersion
     text-align:center;
     font-style: italic;
     font-size: small;
+}
+
+table#tallyHo thead td.sorting_desc
+{
+    background-color: red;
+    color: white;
+}
+
+table#tallyHo thead td.sorting_asc
+{
+    background-color: blue;
+    color: white;
+}
+
+table#tallyHo thead td.sorting_desc a
+{
+    background-color:red;
+    color: white;
+}
+
+table#tallyHo thead td.sorting_asc a
+{
+    background-color:blue;
+    color: white;
 }
