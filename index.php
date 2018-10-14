@@ -45,11 +45,10 @@ $version = "1.3.0";
                     ref = (parseInt(ref[0]) * 1000000) + (parseInt(ref[1]) * 1000) + (parseInt(ref[2]));
                     return parseInt(ref);
                 }
-            })
+            });
 
             jQuery(document).ready(function(){
                 jQuery('#tallyHo').DataTable({
-                    "lengthMenu": [[-1], ["All"]],
                     "bPaginate": false,
                     "bInfo" : false,
                     "bFilter": false,
@@ -71,7 +70,6 @@ $version = "1.3.0";
                 <p id="tallyMo3">If <strong>BOTH</strong> of these conditions are not met, then you cannot use the admin app.</p>
                 <div id="tallyMapButton"><a href="map.php">Display Coverage Map</a></div>
             </div>
-            <table id="tallyLogTable" cellspacing="2" cellpadding="2" border="2" style=""></table>
             <table id="tallyHo"  class="display" style="width:95%">
                 <thead id="tallyHead">
                     <tr>
@@ -109,21 +107,35 @@ foreach ($rootServers as $rootServer) {
     $totalRegions += $rootServer['num_regions'];
     $totalAreas += $rootServer['num_areas'];
 
+    try {
+        $getRootServerInfo = get($rootServer['root_server_url'] . "client_interface/json/?switcher=GetServerInfo");
+    } catch (Exception $e) {
+        error_log('Caught exception: ' . $e->getMessage());
+    }
+    $rootServerInfo = json_decode($getRootServerInfo);
+    if (strlen($rootServerInfo[0]->versionInt) <= '7') {
+        $serverStatus = 'serverUp';
+    } else {
+        $serverStatus = 'serverDown';
+    }
+    error_log($serverStatus);
+
     if ($isSSL && ($serverInfo[0]['versionInt'] >= 2008012) && $isAdminOn) {
         $validServer = 'validServer';
         $serversAdminApp++;
     } else {
         $validServer = 'invalidServer';
-    };
+    }
 
     if ($isSSL) {
         $validSSL = 'validSSL';
     } else {
         $validSSL = 'inValidSSL';
-    };
+    }
+
 ?>
                 <tr>
-                    <td class="tallyName"><a href="<?php echo $rootServer['root_server_url'] ?>" class="tallyClick" target="_blank"><?php echo $rootServer['name'] ?></a> (<a href="<?php echo $rootServer['root_server_url'] . "semantic" ?>" class="tallySemanticClick" target="_blank">Semantic Workshop Link</a>)</td>
+                    <td class="tallyName <?php echo $serverStatus ?>"><a href="<?php echo $rootServer['root_server_url'] ?>" class="tallyClick" target="_blank"><?php echo $rootServer['name'] ?></a> (<a href="<?php echo $rootServer['root_server_url'] . "semantic" ?>" class="tallySemanticClick" target="_blank">Semantic Workshop Link</a>)</td>
                     <td class="tallySSL <?php echo $validSSL ?>"><?php echo $isSSLtxt ?></td>
                     <td class="tallyVersion tallyCoverage <?php echo $validServer ?> tallyCoverage"><?php echo $serverInfo[0]['version'] ?></td>
                     <td class="tallyRegion"><?php echo $rootServer['num_regions'] ?></td>
@@ -150,6 +162,7 @@ foreach ($rootServers as $rootServer) {
 <?php
 
 function get($url) {
+    error_log($url);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0) +tally');

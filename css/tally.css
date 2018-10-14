@@ -102,6 +102,18 @@ table#tallyHo tbody td.tallySSL
     text-align:center;
 }
 
+table#tallyHo tbody td.serverDown a
+{
+    color: red;
+    font-weight: bold;
+}
+
+table#tallyHo tbody td.serverUp a
+{
+
+    color: rgb(51, 102, 255);
+}
+
 table#tallyHo tbody td.inValidSSL
 {
     color: red;
@@ -151,6 +163,7 @@ div#tallyMapButton
 {
     font-weight:bold;
     text-align:center;
+    margin-bottom: 1em;
 }
 
 div#tallyMap
