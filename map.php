@@ -14,74 +14,66 @@ $unique_coordinates = array_unique($coordinates, SORT_REGULAR);
     <meta charset="utf-8">
     <title>BMLT - Meetings</title>
     <style>
-        html, body {
-            padding: 0;
-            margin: 0;
-            height: 100%;
-        }
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
         #map {
             height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
 <body>
 <div id="map"></div>
 <script>
+
     function initMap() {
-        var mylocation = {lat: 42.2625932, lng: -71.8022934};
+
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: mylocation
+            zoom: 3,
+            center: {lat: -28.024, lng: 140.887}
         });
 
-        var locations = [];
+        // Create an array of alphabetical characters used to label the markers.
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+        var markers = locations.map(function(location, i) {
+            return new google.maps.Marker({
+                position: location,
+                label: labels[i % labels.length]
+            });
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    }
+    var locations = [
         <?php
         foreach ($unique_coordinates as $coordinate) {
-                $label = $coordinate['latitude'] . ", " . $coordinate['longitude'];
-                ?>
-
-                addMarker({lat: <?php echo $coordinate['latitude']?>, lng: <?php echo $coordinate['longitude'] ?>}, map, "<?php echo $label ?>", "red");
-                locations.push(new google.maps.LatLng(<?php echo $coordinate['latitude']?>, <?php echo $coordinate['longitude'] ?>));
-        <?php
-            }
-        ?>
-
-        autoZoom(locations, map);
-    }
-
-    function addMarker(location, map, content, icon_color) {
-        var marker = new google.maps.Marker({
-            position: location,
-            icon: "https://maps.google.com/mapfiles/ms/icons/" + icon_color + "-dot.png",
-            map: map,
-            title: content,
-            animation: google.maps.Animation.DROP});
-            infoWindow = new google.maps.InfoWindow({
-            	content: content
-            });
-            google.maps.event.addDomListener(window, 'load', function() {
-                google.maps.event.addListener(marker, 'click', function() {
-                    infoWindow.open(map, marker);
-                });
-            });
-    }
-
-    function autoZoom(locations, map) {
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0, locations_length = locations.length; i < locations_length; i++) {
-            bounds.extend(locations[i]);
+            $label = $coordinate['latitude'] . ", " . $coordinate['longitude'];
+            echo '{lat: ' . $coordinate['latitude'] . ', lng: ' . $coordinate['longitude'] . '},' . "\n";
         }
-
-        map.fitBounds(bounds);
-    }
+        ?>
+    ]
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api_key?>&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api_key ?>&callback=initMap">
 </script>
 </body>
 </html>
 
-<?php 
+<?php
 
 function get($url) {
     $ch = curl_init();

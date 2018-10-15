@@ -106,7 +106,8 @@ foreach ($rootServers as $rootServer) {
     $totalMeetings += $rootServer['num_meetings'];
     $totalRegions += $rootServer['num_regions'];
     $totalAreas += $rootServer['num_areas'];
-
+    $serverStatus = 'serverUp';
+    /*
     try {
         $getRootServerInfo = get($rootServer['root_server_url'] . "client_interface/json/?switcher=GetServerInfo");
     } catch (Exception $e) {
@@ -119,6 +120,7 @@ foreach ($rootServers as $rootServer) {
         $serverStatus = 'serverDown';
     }
     error_log($serverStatus);
+    */
 
     if ($isSSL && ($serverInfo[0]['versionInt'] >= 2008012) && $isAdminOn) {
         $validServer = 'validServer';
