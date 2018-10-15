@@ -7,8 +7,7 @@ $coordinates_respone = get($root_server . "/main_server/client_interface/json/?s
 $coordinates = json_decode($coordinates_respone, true);
 $unique_coordinates = array_unique($coordinates, SORT_REGULAR);
 ?>
-<div id="map"></div>
-<script>
+<script type="text/javascript">
     var map;
     function CenterControl(controlDiv, map) {
 
@@ -40,7 +39,7 @@ $unique_coordinates = array_unique($coordinates, SORT_REGULAR);
 
     }
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('tallyMap'), {
             zoom: 3,
             center: {lat: 36.975594, lng: -99.688277}
         });
