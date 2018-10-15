@@ -68,7 +68,7 @@ $version = "1.3.0";
                 <p id="tallyMo">*Bold green version number indicates server is suitable to use the <a href="https://itunes.apple.com/us/app/na-meeting-list-administrator/id1198601446">NA Meeting List Administrator</a> app.</p>
                 <p id="tallyMo2">Remember that the server must be <a href="https://letsencrypt.org">SSL/HTTPS</a>, in addition to <a href="https://bmlt.app/semantic/semantic-administration/">Semantic Administration being enabled</a>.</p>
                 <p id="tallyMo3">If <strong>BOTH</strong> of these conditions are not met, then you cannot use the admin app.</p>
-                <div id="tallyMapButton"><a href="map.php">Display Coverage Map</a></div>
+                <div id="tallyMapButton"><a href="javascript:displayTallyMap();">Display Coverage Map</a></div>
             </div>
             <table id="tallyHo"  class="display" style="width:95%">
                 <thead id="tallyHead">
@@ -156,8 +156,10 @@ foreach ($rootServers as $rootServer) {
                 </tfoot>
                 </tbody>
             </table>
-    <div id="tallyVersion"><?php echo "Version: " . $version ?></div>
-    </div>
+            <div id="tallyVersion"><?php echo "Version: " . $version ?></div>
+        </div>
+        <div id="tallyMap" style="display: none"><?php include 'map.php'; ?></div>
+        <script type="text/javascript" src="js/TomatoTally.js"></script>
     </body>
 </html>
 

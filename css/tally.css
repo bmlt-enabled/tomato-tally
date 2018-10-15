@@ -166,6 +166,10 @@ div#tallyMapButton
     margin-bottom: 1em;
 }
 
+#map {
+    height: 100%;
+}
+
 div#tallyMap
 {
     width: 100%;
