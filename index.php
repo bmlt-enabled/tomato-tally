@@ -36,8 +36,8 @@ $version = "1.3.0";
         <title>BMLT Live Tally</title>
         <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
         <link rel="stylesheet" type="text/css" href="css/tally.css">
-        <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript">
             jQuery.extend(jQuery.fn.dataTableExt.oSort, {
                 "reference-pre": function (ref) {

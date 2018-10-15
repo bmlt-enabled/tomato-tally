@@ -63,7 +63,7 @@ $unique_coordinates = array_unique($coordinates, SORT_REGULAR);
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 3,
-            center: {lat: -28.024, lng: 140.887}
+            center: {lat: 36.975594, lng: -99.688277}
         });
 
         var centerControlDiv = document.createElement('div');
