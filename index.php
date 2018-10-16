@@ -28,6 +28,7 @@
         along with this code.  If not, see <http://www.gnu.org/licenses/>.
 */
 $version = "1.3.0";
+$days_of_the_week = [1 => "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -164,6 +165,16 @@ foreach ($rootServers as $rootServer) {
 </html>
 
 <?php
+
+function unique_by_keys($haystack = array(),$needles = array()){
+    foreach($haystack as $row){
+        $key = implode('',array_intersect_key($row,array_flip($needles)));
+        if(!isset($result[$key])) {
+            $result[$key] = $row;
+        }
+    }
+    return array_values($result);
+}
 
 function get($url) {
     error_log($url);
