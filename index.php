@@ -39,6 +39,7 @@ $days_of_the_week = [1 => "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"
     <link rel="stylesheet" type="text/css" href="css/tally.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js"></script>
     <script type="text/javascript">
         jQuery.extend(jQuery.fn.dataTableExt.oSort, {
             "reference-pre": function (ref) {
