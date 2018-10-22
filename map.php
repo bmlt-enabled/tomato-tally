@@ -15,8 +15,8 @@ foreach($meetings as $key => $value) {
     $keyfind = array_search($meetings[$key]['root_server_uri'], array_column($rootServers, 'root_server_url'));
     $meetings[$key]['sbname'] = $rootServers[$keyfind]['name'];
 }
-$unique_meetings = unique_by_keys($meetings,array("lat","lng"));
-$meetings_json = json_encode($unique_meetings);
+//$unique_meetings = unique_by_keys($meetings,array("lat","lng"));
+$meetings_json = json_encode($meetings);
 ?>
 <script type="text/javascript">
     var map;
@@ -57,17 +57,38 @@ $meetings_json = json_encode($unique_meetings);
                 lng: -99.688277
             }
         });
+        var clusterMarker = [];
         var centerControlDiv = document.createElement('div');
         var centerControl = new CenterControl(centerControlDiv, map);
-        //var m_icon_image_single = new google.maps.MarkerImage ( "images/NAMarkerB.png", new google.maps.Size(22, 32), new google.maps.Point(0,0), new google.maps.Point(12, 32) );
-        var displayed_image = new google.maps.MarkerImage ( "images/NAMarkerR.png", new google.maps.Size(22, 32), new google.maps.Point(0,0), new google.maps.Point(12, 32) );
-        var m_icon_shadow = new google.maps.MarkerImage( "images/NAMarkerS.png", new google.maps.Size(43, 32), new google.maps.Point(0,0), new google.maps.Point(12, 32) );
 
         // Create the DIV to hold the control and call the CenterControl()
         // constructor passing in this DIV.
         centerControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-        var infoWin = new google.maps.InfoWindow();
+        var infoWindow = new google.maps.InfoWindow();
+
+        // Create OverlappingMarkerSpiderfier instsance
+        var oms = new OverlappingMarkerSpiderfier(map, { markersWontMove: true, markersWontHide: true });
+
+        oms.addListener('format', function(marker, status) {
+            var iconURL = status == OverlappingMarkerSpiderfier.markerStatus.SPIDERFIED ? 'images/NAMarkerR.png' :
+                status == OverlappingMarkerSpiderfier.markerStatus.SPIDERFIABLE ? 'images/NAMarkerB.png' :
+                status == OverlappingMarkerSpiderfier.markerStatus.UNSPIDERFIABLE ? 'images/NAMarkerR.png' :
+                null;
+            var iconSize = new google.maps.Size(22, 32);
+            marker.setIcon({
+                url: iconURL,
+                size: iconSize,
+                scaledSize: iconSize
+            });
+        });
+
+
+        // This is necessary to make the Spiderfy work
+        oms.addListener('click', function(marker) {
+            infoWindow.setContent(marker.desc);
+            infoWindow.open(map, marker);
+        });
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "locations" array.
@@ -99,23 +120,24 @@ $meetings_json = json_encode($unique_meetings);
             marker_html += '</a></em></dd>';
 
             var marker = new google.maps.Marker({
-                shadow: m_icon_shadow,
-                icon: displayed_image,
-                position: location
-                //label: labels[i % labels.length]
+                position: location,
+                map: map
             });
-            google.maps.event.addListener(marker, 'click', function(evt) {
 
-                infoWin.setContent(marker_html);
-                infoWin.open(map, marker);
+            // needed to make Spiderfy work
+            oms.addMarker(marker);
+
+            // needed to cluster marker
+            clusterMarker.push(marker);
+            google.maps.event.addListener(marker, 'click', function(evt) {
+                infoWindow.setContent(marker_html);
+                infoWindow.open(map, marker);
             })
             return marker;
         });
 
         // Add a marker clusterer to manage the markers.
-        var markerCluster = new MarkerClusterer(map, markers, {
-            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-        });
+        new MarkerClusterer(map, clusterMarker, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m', maxZoom: 15});
     }
     var locations = <?php echo $meetings_json; ?>
 
